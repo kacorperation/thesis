@@ -1,0 +1,1 @@
+initial=ones(2,n)+addBalls2(matrix,initialRedBudget,1,initialBlackBudget,0);

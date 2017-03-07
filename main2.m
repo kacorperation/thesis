@@ -9,39 +9,59 @@ initial is the initial conditions where
 %}
 n=10; %number of nodes
 %number of red balls to be added at time 0
-initialRedBudget=60; 
+initialRedBudget=600; 
 %number of black balls to be added at time 0
-initialBlackBudget=40;
+initialBlackBudget=400;
 %deltas are the number of balls to add at each polya urn pick (for god's
 %sake keep them equal I made a mistake not making them a single variable)
-delta=100;
+delta=30;%=budget? Less? More?
 deltaRed=delta;
 deltaBlack=delta;
 %budget per time step allowed for black balls
-budget=30; %should this be n?
+budget=n*deltaRed; %should this be n?
 %Amount of time steps to take in each experiment
 timeSteps=1000;
 %amount of experiments with same initial conditions per solution method
-amountOfExperiments=1000;
+amountOfExperiments=1;
 %End of variable assignments
 
 
 
 %matrix is the adjacency matrix
-matrix=scalefree(n,3,1);
+matrix=scalefree(n,3,2);
 
 %addballs2 adds red and black balls according to specifications
 %initial is the ball distribution per node at time 0
 %initial=ones(2,n)+addBalls2(matrix,initialRedBudget,1,initialBlackBudget,0);
 
 %uniform distribution of balls with a/(a+b) infectedness
-initial=[59*ones(1,n);41*ones(1,n)];
-result=doExperiments(n,amountOfExperiments,timeSteps,initial,matrix,budget,deltaRed,deltaBlack);
+initial=[50*ones(1,n);50*ones(1,n)];
+
+%do the experiment, get the precious data
+[result,deltaLossMatrix]=doExperiments(n,amountOfExperiments,timeSteps,initial,matrix,budget,deltaRed,deltaBlack);
+amountOfMethods=size(result,1);
+
+
+
+%average the deltaLossMatrix
+%deltaLoss is the average loss of delta for each method
+deltaLoss=zeros(1,amountOfMethods);
+for i=1:amountOfMethods
+    for k=1:timeSteps
+        for j=1:amountOfExperiments
+            deltaLoss(i)=deltaLoss(i)+deltaLossMatrix(i,j,k);
+        end
+    end
+    deltaLoss(i)=deltaLoss(i)/amountOfExperiments/timeSteps;
+end
+
+
+
+
 %average data avrages the output of the doExperiments over the amount of
 %experiments
 averageData=averageResults(result,timeSteps,amountOfExperiments)/n;
 %amountOfMethods=how many curing methods have been tested
-amountOfMethods=size(result,1);
 %infectednessMatrix holds the average over the experiments'
 %infectedness (E[s^{tilde}_n]of the systems in each time step including time zero
 infectednessMatrix=zeros(amountOfMethods,timeSteps+1);

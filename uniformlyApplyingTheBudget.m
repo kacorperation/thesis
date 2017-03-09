@@ -1,5 +1,4 @@
-function delta=uniformlyApplyingTheBudget(budget,matrix)
-    n=size(matrix,2);
+function delta=uniformlyApplyingTheBudget(budget,matrix,n)
     checker=matrix;
     for i=1:budget
         matrix(1,mod(i,n)+1)= matrix(1,mod(i,n)+1)+1;

@@ -1,9 +1,7 @@
-function delta=nodeDegree(budget,matrix)
-    n=size(matrix,2);
-    total=sum(matrix(:));
+function delta=nodeDegree(budget,matrix,n)
     delta=zeros(1,n);
     for i=1:n
-        delta(i)=budget*sum(matrix(i,:))/total;
+        delta(i)=sum(matrix(i,:))/sum(matrix(:));
     end
-    delta=properRounder(budget,delta);
+    delta=properRounder(budget,budget*delta);
 end

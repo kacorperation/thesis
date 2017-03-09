@@ -1,6 +1,5 @@
 %matrix is the adjacency matrix
-function delta=degreeAndInfectedness(budget,matrix,ballMatrix)
-    n=size(matrix,2);
+function delta=degreeAndInfectedness(budget,matrix,ballMatrix,n)
     delta=zeros(1,n);
     denomenator=0;
     %calculate denomenator

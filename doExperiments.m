@@ -22,10 +22,10 @@ Here's a list of functions we'll include for the trials:
 7-ratioOfInfectedness
 8-superUrnRatio
 9-uniformlyApplyingTheBudget
+10-degreeCentralitySuperUrn
 More will be added later
 %}
-amountOfMethods=9; %change this as more experiments are added
-
+amountOfMethods=10; %change this as more experiments are added
 %tracker will store the average Z of a system for every experiment and
 %every time step of it (ie tracker(a)(b)(c) will record method a's
 %experiment number b's average Z value at time step c
@@ -41,7 +41,7 @@ for a=1:amountOfMethods
             switch a
                 case 1
                     %pre-decide the budget allocation
-                    delta1=cureMostInfectedNode(budget,ballMatrix);
+                    delta1=cureMostInfectedNode(budget,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -60,7 +60,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 2
-                    delta1=degreeAndInfectedness(budget,matrix,ballMatrix);
+                    delta1=degreeAndInfectedness(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -79,7 +79,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 3
-                    delta1=degreeAndSuperUrnRatio(budget,matrix,ballMatrix);
+                    delta1=degreeAndSuperUrnRatio(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -98,7 +98,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 4
-                    delta1=eigenCentralityAndSuperUrnRatio(budget,matrix,ballMatrix);
+                    delta1=eigenCentralityAndSuperUrnRatio(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -117,7 +117,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 5
-                    delta1=infectednessAndCentrality(budget,matrix,ballMatrix);
+                    delta1=infectednessAndCentrality(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -136,7 +136,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 6
-                    delta1=nodeDegree(budget,matrix);
+                    delta1=nodeDegree(budget,matrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -155,7 +155,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 7
-                    delta1=ratioOfInfectedness(budget,ballMatrix);
+                    delta1=ratioOfInfectedness(budget,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -174,7 +174,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 8
-                    delta1=superUrnRatio(budget,matrix,ballMatrix);
+                    delta1=superUrnRatio(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn
@@ -193,7 +193,26 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 9
-                    delta1=uniformlyApplyingTheBudget(budget,matrix);
+                    delta1=uniformlyApplyingTheBudget(budget,matrix,n);
+                    %do the draw process
+                    delta2=draw(matrix,ballMatrix);
+                    %sum all Zn
+                    tracker(a,b,c)=sum(delta2(1,:));
+                    %find how many black balls to add to the system
+                    for i=1:n
+                        if (delta2(2,i)==0)
+                            deltaLoss=deltaLoss+delta1(i);
+                            delta1(i)=0;
+                        end
+                    end
+                    %find how many red balls to add to the system
+                    
+                    delta2=delta2(1,:);
+                    delta2=delta2*deltaRed;
+                    %update the ball matrix
+                    ballMatrix=ballMatrix+[delta2;delta1];
+                case 10
+                    delta1=degreeCentralitySuperUrn(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(matrix,ballMatrix);
                     %sum all Zn

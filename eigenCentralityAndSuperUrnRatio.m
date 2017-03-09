@@ -1,13 +1,12 @@
-function delta= eigenCentralityAndSuperUrnRatio(budget,matrix,ballMatrix)
+function delta= eigenCentralityAndSuperUrnRatio(budget,matrix,ballMatrix,n)
     %each column is the super urn's infectedness ratio
-    n=size(matrix,2);
-    superUrnRatios=superUrnInfectedness(matrix,ballMatrix);
-    urnInfectednessSum=sum(superUrnRatios);
-    centalityScores=transpose(eigenCentrality(matrix));
     delta=zeros(1,n);
+    superUrnRatios=superUrnInfectedness(matrix,ballMatrix);
+    centalityScores=transpose(eigenCentrality(matrix));
     for i=1:n
-        delta(i)=budget*superUrnRatios(i)/urnInfectednessSum*centalityScores(i);
+        delta(i)=centalityScores(i)*superUrnRatios(i)/sum(superUrnRatios);
     end
-    delta=properRounder(budget,delta);
+    delta=delta/sum(delta);
+    delta=properRounder(budget,budget*delta);
 end
 

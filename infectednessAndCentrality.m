@@ -1,5 +1,4 @@
-function delta = infectednessAndCentrality(budget,matrix,ballMatrix)
-    n=size(matrix,2);
+function delta = infectednessAndCentrality(budget,matrix,ballMatrix,n)
     delta=zeros(1,n);
     infectedness=superUrnInfectedness(matrix,ballMatrix);
     centrality=transpose(eigenCentrality(matrix));

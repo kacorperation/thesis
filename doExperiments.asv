@@ -26,12 +26,10 @@ Here's a list of functions we'll include for the trials:
 11-GradientFlow
 12-Magnitude
 13-magnitudeDegreeSuperUrnRatio
-14-magnitudeCentralitySuperUrnRatio
-15-magnitudeCentralityDegreeSuperUrnRatio
 More will be added later
 %}
 [V,D] = eigs(matrix); %used for centrality calculations
-amountOfMethods=15; %change this as more experiments are added
+amountOfMethods=11; %change this as more experiments are added
 %tracker will store the average Z of a system for every experiment and
 %every time step of it (ie tracker(a)(b)(c) will record method a's
 %experiment number b's average Z value at time step c
@@ -41,8 +39,7 @@ deltaLossMatrix=zeros(amountOfMethods,amountOfExperiments,timeSteps);
 uniformbudget = uniformlyApplyingTheBudget(budget,matrix,n);
 %stores the degree values
 degreeMatrix=degree(matrix,n);
-%stores the centrality values
-centralityMatrix=transpose(eigenCentrality(V,D));
+%store
 for a=1:amountOfMethods
     for b=1:amountOfExperiments
         %reset the ballMatrix whenever you are doing a new experiment
@@ -90,7 +87,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 3
-                    delta1=degreeAndSuperUrnRatio(budget,matrix,ballMatrix,n,degreeMatrix);
+                    delta1=degreeAndSuperUrnRatio(budget,matrix,ballMatrix,n);
                     %do the draw process
                     delta2=draw(adjmatrix,ballMatrix);
                     %sum all Zn
@@ -109,7 +106,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 4
-                    delta1=eigenCentralityAndSuperUrnRatio(budget,adjmatrix,ballMatrix,n,centralityMatrix);
+                    delta1=eigenCentralityAndSuperUrnRatio(budget,adjmatrix,ballMatrix,n,V,D);
                     %do the draw process
                     delta2=draw(adjmatrix,ballMatrix);
                     %sum all Zn
@@ -128,7 +125,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 5
-                    delta1=infectednessAndCentrality(budget,matrix,ballMatrix,n,centralityMatrix);
+                    delta1=infectednessAndCentrality(budget,adjmatrix,ballMatrix,n,V,D);
                     %do the draw process
                     delta2=draw(adjmatrix,ballMatrix);
                     %sum all Zn
@@ -224,7 +221,7 @@ for a=1:amountOfMethods
                     %update the ball matrix
                     ballMatrix=ballMatrix+[delta2;delta1];
                 case 10
-                    delta1=degreeCentralitySuperUrn( budget,matrix,ballMatrix,n,centralityMatrix,adjmatrix);
+                    delta1=degreeCentralitySuperUrn(budget,matrix,ballMatrix,n,V,D,adjmatrix);
                     %do the draw process
                     delta2=draw(adjmatrix,ballMatrix);
                     %sum all Zn
@@ -264,66 +261,6 @@ for a=1:amountOfMethods
                 case 12
                     %delta1=uniformlyApplyingTheBudget(budget,matrix,n)
                     delta1 = magnitude(budget,ballMatrix,n);
-                    %do the draw process
-                    delta2=draw(adjmatrix,ballMatrix);
-                    %sum all Zn
-                    tracker(a,b,c)=sum(delta2(1,:));
-                    %find how many black balls to add to the system
-                    for i=1:n
-                        if (delta2(2,i)==0)
-                            deltaLoss=deltaLoss+delta1(i);
-                            delta1(i)=0;
-                        end
-                    end
-                    %find how many red balls to add to the system
-                    
-                    delta2=delta2(1,:);
-                    delta2=delta2*deltaRed;
-                    %update the ball matrix
-                    ballMatrix=ballMatrix+[delta2;delta1];
-                case 13
-                    %delta1=uniformlyApplyingTheBudget(budget,matrix,n)
-                    delta1 = magnitudeDegreeSuperUrnRatio(budget,matrix,ballMatrix,degreeMatrix,n);
-                    %do the draw process
-                    delta2=draw(adjmatrix,ballMatrix);
-                    %sum all Zn
-                    tracker(a,b,c)=sum(delta2(1,:));
-                    %find how many black balls to add to the system
-                    for i=1:n
-                        if (delta2(2,i)==0)
-                            deltaLoss=deltaLoss+delta1(i);
-                            delta1(i)=0;
-                        end
-                    end
-                    %find how many red balls to add to the system
-                    
-                    delta2=delta2(1,:);
-                    delta2=delta2*deltaRed;
-                    %update the ball matrix
-                    ballMatrix=ballMatrix+[delta2;delta1];
-                case 14
-                    %delta1=uniformlyApplyingTheBudget(budget,matrix,n)
-                    delta1 = magnitudeCentralitySuperUrnRatio( budget,n,centralityMatrix,matrix,ballMatrix );
-                    %do the draw process
-                    delta2=draw(adjmatrix,ballMatrix);
-                    %sum all Zn
-                    tracker(a,b,c)=sum(delta2(1,:));
-                    %find how many black balls to add to the system
-                    for i=1:n
-                        if (delta2(2,i)==0)
-                            deltaLoss=deltaLoss+delta1(i);
-                            delta1(i)=0;
-                        end
-                    end
-                    %find how many red balls to add to the system
-                    
-                    delta2=delta2(1,:);
-                    delta2=delta2*deltaRed;
-                    %update the ball matrix
-                    ballMatrix=ballMatrix+[delta2;delta1];
-                case 15
-                    %delta1=uniformlyApplyingTheBudget(budget,matrix,n)
-                    delta1 = magnitudeCentralityDegreeSuperUrnRatio( budget,n,centralityMatrix,matrix,ballMatrix,degreeMatrix );
                     %do the draw process
                     delta2=draw(adjmatrix,ballMatrix);
                     %sum all Zn

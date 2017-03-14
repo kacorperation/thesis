@@ -44,10 +44,10 @@ end
 
 %addballs2 adds red and black balls according to specifications
 %initial is the ball distribution per node at time 0
-initial=ones(2,n)+addBalls2(matrix,initialRedBudget,1,initialBlackBudget,0);
+% initial=ones(2,n)+addBalls2(matrix,initialRedBudget,1,initialBlackBudget,0);
 
 %uniform distribution of balls with a/(a+b) infectedness
-%initial=[50*ones(1,n);50*ones(1,n)];
+initial=[50*ones(1,n);50*ones(1,n)];
 
 %do the experiment, get the precious data
 [result,deltaLossMatrix]=doExperiments(n,amountOfExperiments,timeSteps,initial,matrix,budget,deltaRed,deltaBlack,adjmatrix);

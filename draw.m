@@ -9,19 +9,23 @@ function delta=draw(matrix,ballMatrix)
     delta=zeros(2,n);
     %numBalls is the number of balls in matrix i's super urn. Row 1
     %is red balls and row 2 is black balls
-    numBalls=zeros(2,1);
     %go through each node's super urn
     for i=1:n
         %add the number of balls in node i to numBalls variable
-        numBalls=ballMatrix(:,i);
+        %numBalls=ballMatrix(:,i);
         %infectedRatio is the number of red balls in super urn of node i divided by
         %the total number of balls in super urn of i
         %fill numBalls matrix
+       %{
         for j=1:n
             if matrix(i,j)==1
                 numBalls=numBalls+ballMatrix(:,j);
             end
         end
+        %}
+
+        numBalls = matrix(i,:)*transpose(ballMatrix);
+        
         infectedRatio=numBalls(1)/sum(numBalls);
         if rand(1)<=infectedRatio
             delta(1,i)=1;

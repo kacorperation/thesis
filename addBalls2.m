@@ -3,7 +3,7 @@
 %matrix is adjacency matrix
 %numRed is the number of red balls to add
 %typeRed is the way to add red balls (uniform, central etc.)
-function delta = addBalls2(matrix,numRed,typeRed,numBlack,typeBlack)
+function delta = addBalls2(matrix,numRed,typeRed,numBlack,typeBlack,V,D)
     n=size(matrix,2);
     %x and y are the first and second rows of delta, respectively
     %x=zeros(1,n);
@@ -12,7 +12,7 @@ function delta = addBalls2(matrix,numRed,typeRed,numBlack,typeBlack)
         case 0
             x=uniform(n,numRed);
         case 1
-            x=centrallyDistribute(matrix,numRed);
+            x=centrallyDistribute(matrix,numRed,V,D);
     end
     switch typeBlack
         case 0

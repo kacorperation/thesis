@@ -20,9 +20,9 @@ deltaBlack=delta;
 %budget per time step allowed for black balls
 budget=n*deltaRed; %should this be n?
 %Amount of time steps to take in each experiment
-timeSteps=1000;
+timeSteps=5000;
 %amount of experiments with same initial conditions per solution method
-amountOfExperiments=10;
+amountOfExperiments=1000;
 %End of variable assignments
 
 
@@ -44,10 +44,10 @@ end
 
 %addballs2 adds red and black balls according to specifications
 %initial is the ball distribution per node at time 0
-% initial=ones(2,n)+addBalls2(matrix,initialRedBudget,1,initialBlackBudget,0);
+initial=ones(2,n)+addBalls2(matrix,initialRedBudget,1,initialBlackBudget,0,V,D);
 
 %uniform distribution of balls with a/(a+b) infectedness
-initial=[50*ones(1,n);50*ones(1,n)];
+%initial=[50*ones(1,n);50*ones(1,n)];
 
 %do the experiment, get the precious data
 [result,deltaLossMatrix]=doExperiments(n,amountOfExperiments,timeSteps,initial,matrix,budget,deltaRed,deltaBlack,adjmatrix);

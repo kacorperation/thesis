@@ -1,6 +1,6 @@
-function x=centrallyDistribute(matrix,numBalls)
+function x=centrallyDistribute(matrix,numBalls,V,D)
     n=size(matrix,2);
-    c=transpose(eigenCentrality(matrix)); %Find centrality of nodes
+    c=transpose(eigenCentrality(V,D)); %Find centrality of nodes
     x=zeros(1,n);
     display(c);
     display(sum(c));
